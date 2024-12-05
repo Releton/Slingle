@@ -47,7 +47,6 @@ public class SlingScript : MonoBehaviour
     }
     void Update()
     {
-        this.transform.rotation = Quaternion.Euler(0, Light.transform.rotation.eulerAngles.y -90, 0);
         if (life == 0) return;//End
 
         if ((Rb == null  || GameManager.hasCurChanged) && GameManager.isBallLeft)
