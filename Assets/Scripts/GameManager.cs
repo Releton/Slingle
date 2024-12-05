@@ -193,10 +193,7 @@ public class GameManager : MonoBehaviour
         {
             SelectCurrent(currentIndex + 1);
         }   
-        if (BallScript.isActivated)
-        {
-            focusOnball();
-        }
+
         if (!BallScript.isActivated)
         {
             focusOnSlingShot();

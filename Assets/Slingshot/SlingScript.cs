@@ -19,21 +19,23 @@ public class SlingScript : MonoBehaviour
     private Vector2 fnMouse = new Vector2();
     private double ang;
     private double angz;
-    private bool isGnd;
-    private float flowingTime;
     [SerializeField]
     private Transform midRubber;
     public TrajectoryPrediction trajectory;
-
+    public static Transform posn;
+    public float overallMaxSpeed;
+    public int displayLife;
+    public static int life;
+    public GameObject Light;
 
     [SerializeField] UI_Inventory uiInventory;
-
     public float maxRubber;
 
     private void Awake()
     {
         resetSling();
-
+        posn = this.gameObject.transform;
+        life = displayLife;
     }
 
     void Start()
@@ -45,6 +47,9 @@ public class SlingScript : MonoBehaviour
     }
     void Update()
     {
+        this.transform.rotation = Quaternion.Euler(0, Light.transform.rotation.eulerAngles.y -90, 0);
+        if (life == 0) return;//End
+
         if ((Rb == null  || GameManager.hasCurChanged) && GameManager.isBallLeft)
         {
             Rb = GameManager.CurrentStack.Peek()?.GetComponent<Rigidbody>();
@@ -60,8 +65,6 @@ public class SlingScript : MonoBehaviour
             {
                 Rb.AddForce(new Vector3(0, 0, -GameManager.CurrentStack.Peek().GetComponent<BallScript>().type.windSpeed * GameManager.windLevel));
             }
-            else
-            {
 
 
                 if (Input.GetMouseButtonDown(1))
@@ -77,7 +80,7 @@ public class SlingScript : MonoBehaviour
                     GameManager.CurrentStack.Peek().transform.position = midRubber.position;
                     fnMouse = Input.mousePosition;
                     ang = Math.Clamp(((fnMouse - inMouse).y) / -Screen.height * 100 * 9 / 5, 0, 58);
-                    angz = Math.Clamp(((fnMouse - inMouse).x / Screen.width * 100) * 9 / 5, -40, 40);
+                    angz = Math.Clamp(((fnMouse - inMouse).x / Screen.width * 100) * 9 / 5 , -69, 69);
                     Parent.transform.localScale = new Vector3(percentPower(time) * maxRubber / 100f, Parent.transform.localScale.y, Parent.transform.localScale.z);
                     Parent.SetPositionAndRotation(Parent.transform.position, Quaternion.Euler(0, -(float)angz, (float)ang));
                     power = powerTime(time);
@@ -95,30 +98,21 @@ public class SlingScript : MonoBehaviour
                     //Rb.velocity = -powerDrag();
 
                 }
-            }
         }
         
-
-    }
-    private void deActivateBall()
-    {
-        GameManager.CurrentStack.Peek().GetComponent<Rigidbody>().isKinematic = false;
 
     }
 
     float percentPower(float t)
     {
-        return powerTime(t)/(5f * maxSpeed) * 100f;
+        return powerTime(t)/(5f * maxSpeed * overallMaxSpeed) * 100f;
     }
     float powerTime(float t)
     {
-        return (float)((1 / (1 + Math.Pow(Math.E, -t))) - 0.5f) * 10 * maxSpeed;
+        return (float)((1 / (1 + Math.Pow(Math.E, -t))) - 0.5f) * 10 * maxSpeed * overallMaxSpeed;
     }
 
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(GameManager.CurrentStack.Peek().transform.position, -Vector3.up, 0.5f);
-    }
+    
 
     public void resetSling()
     {
