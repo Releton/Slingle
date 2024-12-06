@@ -15,5 +15,5 @@ MonoBehaviour:
   name: plasticball
   objGraphics: {fileID: 3019308049417036592, guid: 75b2e346fd711e648a854a1b6e8b2ca0, type: 3}
   maxSpeed: 7
-  windSpeed: 1.7
+  windSpeed: 1
   icon: {fileID: 21300000, guid: 54e4b17e0f6ccdb4ca2f0eb235b6a6f4, type: 3}

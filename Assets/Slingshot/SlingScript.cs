@@ -27,6 +27,8 @@ public class SlingScript : MonoBehaviour
     public int displayLife;
     public static int life;
     public GameObject Light;
+        public Jumpscaring jumpscaring;
+    public static bool isGameEnded = false;
 
     [SerializeField] UI_Inventory uiInventory;
     public float maxRubber;
@@ -45,9 +47,19 @@ public class SlingScript : MonoBehaviour
         power = 0f;
         Rb = GameManager.CurrentStack.Peek().GetComponent<Rigidbody>();
     }
+    private void End()
+    {
+        jumpscaring.JumpScare();
+    }
     void Update()
     {
-        if (life == 0) return;//End
+        if (isGameEnded) return;
+        if (life == 0 && isGameEnded == false)
+        {
+            End();
+            isGameEnded = true;
+            return;
+        }//End
 
         if ((Rb == null  || GameManager.hasCurChanged) && GameManager.isBallLeft)
         {
@@ -74,16 +86,21 @@ public class SlingScript : MonoBehaviour
 
                 if (Input.GetMouseButton(1))
                 {
-
                     time += Time.deltaTime;
                     GameManager.CurrentStack.Peek().transform.position = midRubber.position;
                     fnMouse = Input.mousePosition;
                     ang = Math.Clamp(((fnMouse - inMouse).y) / -Screen.height * 100 * 9 / 5, 0, 58);
                     angz = Math.Clamp(((fnMouse - inMouse).x / Screen.width * 100) * 9 / 5 , -69, 69);
-                    Parent.transform.localScale = new Vector3(percentPower(time) * maxRubber / 100f, Parent.transform.localScale.y, Parent.transform.localScale.z);
-                    Parent.SetPositionAndRotation(Parent.transform.position, Quaternion.Euler(0, -(float)angz, (float)ang));
                     power = powerTime(time);
-                    trajectory.PredictTrajectory((float)ang, (float)angz, power * (float)Math.Cos(ang * Mathf.Deg2Rad), power * (float)Math.Sin(ang * Mathf.Deg2Rad), power * (float)Math.Sin(angz * Mathf.Deg2Rad), GameManager.CurrentStack.Peek());
+
+                    Debug.Log("Power" + power);
+                    if(power > 0)
+                    {
+                        Parent.transform.localScale = new Vector3(percentPower(time) * maxRubber / 100f, Parent.transform.localScale.y, Parent.transform.localScale.z);
+                        trajectory.PredictTrajectory((float)ang, (float)angz, power * (float)Math.Cos(ang * Mathf.Deg2Rad), power * (float)Math.Sin(ang * Mathf.Deg2Rad), power * (float)Math.Sin(angz * Mathf.Deg2Rad), GameManager.CurrentStack.Peek());
+
+                    }
+                    Parent.SetPositionAndRotation(Parent.transform.position, Quaternion.Euler(0, -(float)angz, (float)ang));
                 }
 
                 if (Input.GetMouseButtonUp(1))

@@ -45,12 +45,14 @@ public class Skull : MonoBehaviour
     {
         return Physics.Raycast(this.transform.position, -Vector3.up, 3f);
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.gameObject.tag == "EndWall")
+        if (other.gameObject.tag == "EndWall")
         {
-            SlingScript.life--;
+            SlingScript.life -= 1;
             Debug.Log(SlingScript.life);
+            Destroy(gameObject);
         }
     }
+
 }

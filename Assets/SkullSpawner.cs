@@ -16,7 +16,7 @@ public class SkullSpawner : MonoBehaviour
     {
         time += Time.deltaTime;
 
-        if(time >= 10f)
+        if(time >= 6f)
         {
             SpawnSkull(0,12f,40f,1);
             time = 0;
@@ -36,6 +36,6 @@ public class SkullSpawner : MonoBehaviour
         }
         wave++;
     }
-
+    
 
 }

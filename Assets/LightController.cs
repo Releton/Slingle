@@ -5,12 +5,13 @@ using UnityEngine;
 public class LightController : MonoBehaviour
 {
 
-    public float rotationSpeed;
+    public float sensitivity;
     private float currentYRotation = 90f;
+    private float rotationSpeed;
     private void Update()
     {
         float rotationAmount = 0f;
-        rotationAmount = Input.GetKey(KeyCode.LeftShift) ? rotationAmount * 1.5f : rotationAmount;
+        rotationSpeed = Input.GetKey(KeyCode.LeftShift) ? sensitivity * 1.5f : sensitivity;
         // Check input and calculate rotation
         if (Input.GetKey(KeyCode.A))
         {

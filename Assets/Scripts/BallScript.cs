@@ -54,7 +54,7 @@ public class BallScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
 
-        if (!isActivated) return;
+        if (!isActivated || collision.collider.gameObject.tag == "EndWall") return;
 
         if(collision.gameObject.tag == "Obstacle")
         {

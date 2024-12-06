@@ -95,7 +95,6 @@ public class GameManager : MonoBehaviour
     }
     private void SelectCurrent(int index)
     {
-        Debug.Log(index);
         CurrentStack = DataInventory[RectifyIndex(index)];
         hasCurChanged = true;
         currentIndex = RectifyIndex(index);
@@ -125,7 +124,8 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Delete");
             DataInventory.RemoveAt(currentIndex);
-            SelectCurrent(currentIndex + 1);
+            SelectCurrent(RectifyIndex(currentIndex + 1));
+            
         }
         else
         { 
